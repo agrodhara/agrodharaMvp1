@@ -7,7 +7,7 @@ const pool = mysql.createPool({
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME || 'fpo_management2',
   waitForConnections: true,
-  connectionLimit: 10,
+  connectionLimit: 40,
   queueLimit: 0
 });
 
