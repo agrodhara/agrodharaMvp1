@@ -9,8 +9,8 @@ class AuthService {
   constructor() {
     this.JWT_SECRET = process.env.JWT_SECRET || "your-secret-key-keep-it-secret";
     this.JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || "your-refresh-secret-keep-it-secret-too";
-    this.JWT_EXPIRES_IN = '5m';
-    this.JWT_REFRESH_EXPIRES_IN = '15m';
+    this.JWT_EXPIRES_IN = '1h';
+    this.JWT_REFRESH_EXPIRES_IN = '7d';
   }
 
   async generateAuthToken(user) {

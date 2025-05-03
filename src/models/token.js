@@ -4,12 +4,12 @@ const crypto = require('crypto');
 
 const TokenModel = {
   async generateTokens(phone) {
-    const accessToken = jwt.sign({ phone }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "5m" });
-    const refreshToken = jwt.sign({ phone }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: "15m" });
+    const accessToken = jwt.sign({ phone }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "1h" });
+    const refreshToken = jwt.sign({ phone }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: "7d" });
 
-    // Calculate expiration times
-    const accessTokenExpiresAt = new Date(Date.now() + 5 * 60 * 1000); // 5 minutes from now
-    const refreshTokenExpiresAt = new Date(Date.now() + 15 * 60 * 1000); // 15 minutes from now
+       // Calculate expiration times
+       const accessTokenExpiresAt = new Date(Date.now() + 60 * 60 * 1000); // 1 hour from now
+       const refreshTokenExpiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
 
     await db.pool.execute(
         'INSERT INTO auth_tokens (phone, auth_token, refresh_token, expires_at) ' +
@@ -33,12 +33,12 @@ async refreshTokens(refreshToken) {
         throw new Error('Invalid or expired refresh token');
     }
 
-    const newAccessToken = jwt.sign({ phone: decoded.phone }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "5m" });
-    const newRefreshToken = jwt.sign({ phone: decoded.phone }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: "15m" });
+    const newAccessToken = jwt.sign({ phone: decoded.phone }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "1h" });  // 1 hour expiration for access token
+    const newRefreshToken = jwt.sign({ phone: decoded.phone }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: "7d" });  // 7 days expiration for refresh token
 
-    // Calculate new expiration times
-    const newAccessTokenExpiresAt = new Date(Date.now() + 5 * 60 * 1000); // 5 minutes from now
-    const newRefreshTokenExpiresAt = new Date(Date.now() + 15 * 60 * 1000); // 15 minutes from now
+      // Calculate new expiration times
+      const newAccessTokenExpiresAt = new Date(Date.now() + 60 * 60 * 1000); // 1 hour from now
+      const newRefreshTokenExpiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 days from now
 
     await db.pool.execute(
         'UPDATE auth_tokens SET auth_token = ?, refresh_token = ?, expires_at = ? WHERE phone = ?',
