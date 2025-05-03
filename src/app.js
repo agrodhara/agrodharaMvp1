@@ -32,7 +32,7 @@ app.use((req, res, next) => {
 });
 
 app.use(bodyParser.json());
-app.use(rateLimiter.apiLimiter);
+
 
 // Initialize database
 db.initializeDatabase()

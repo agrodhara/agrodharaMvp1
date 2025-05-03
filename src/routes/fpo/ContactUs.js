@@ -131,7 +131,7 @@ router.post('/contact',
     // Mail to Admin
     const adminMailOptions = {
       from: 'Agrodhara Support <agrodhara1@gmail.com>',
-      to: '23bcp1046@satyawati.du.ac.in',
+      to: 'agrodhara1@gmail.com',
       subject: `New Support Request: ${issueType}`,
       html: adminHtmlTemplate,
       text: `
