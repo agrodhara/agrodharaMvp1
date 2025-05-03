@@ -1,0 +1,286 @@
+{
+    "common": {
+        "welcome": "Welcome to Agrodhara",
+        "loading": "Loading...",
+        "error": "Error",
+        "close": "Close",
+        "success": "Success",
+        "cancel": "Cancel",
+        "selectlanguage": "Select Language",
+        "save": "Save",
+        "submit": "Submit",
+        "login": "Login",
+        "logout": "Logout",
+        "signup": "Sign Up",
+        "tryAgain": "Try Again",
+        "continue": "Continue",
+        "edit": "Edit",
+        "create": "Create",
+        "createNewFPOAccount": "Create New FPO Account",
+        "next": "Next",
+        "previous": "Previous",
+        "phoneNumber": "Phone Number",
+        "password": "Password",
+        "confirmPassword": "Confirm Password",
+        "currentPassword": "Current Password",
+        "newPassword": "New Password",
+        "forgotPassword": "Forgot Password?",
+        "dontHaveAccount": "Don't have an account?",
+        "alreadyHaveAccount": "Already have an account?",
+        "termsAndConditions": "Terms of Service and Privacy Policy",
+        "byContinuing": "By continuing, you agree to our Terms of Service and Privacy Policy",
+        "requiredField": "This field is required",
+        "invalidPhone": "Please enter a valid 10-digit phone number",
+        "invalidOtp": "Please enter a valid 6-digit OTP",
+        "passwordMismatch": "Passwords do not match",
+        "passwordLength": "Password must be at least 6 characters",
+        "email": "Email",
+        "name": "Name",
+        "search": "Search",
+        "notifications": "Notifications",
+        "profile": "Profile",
+        "settings": "Settings",
+        "help": "Help",
+        "contactUs": "Contact Us",
+        "about": "About",
+        "version": "Version",
+        "back": "Back",
+        "delete": "Delete",
+        "call": "Call",
+        "add": "Add",
+        "confirm": "Confirm",
+        "reset": "Reset",
+        "required": "Required",
+        "invalid": "Invalid",
+        "select": "Select",
+        "yes": "Yes",
+        "no": "No",
+        "getstarted":"Get Started"
+    },
+    "login": {
+      "title": "Login to your fpo account",
+      "phone": "Phone Number",
+      "password": "Password",
+      "forgotPassword": "Forgot Password?",
+      "loginButton": "Login",
+      "noAccount": "Don't have an account? Sign Up",
+      "signup": "Sign Up"
+    },
+    "signup": {
+      "title": "Sign Up",
+      "name": "Name",
+      "phone": "Phone Number",
+      "password": "Password",
+      "confirmPassword": "Confirm Password",
+      "signupButton": "Sign Up",
+      "haveAccount": "Already have an account?",
+      "login": "Login"
+    },
+    "forgotPassword": {
+      "title": "Forgot Password",
+      "enterPhone": "Enter your phone number",
+      "sendOtp": "Send OTP",
+      "enterOtp": "Enter OTP sent to your phone",
+      "verifyOtp": "Verify OTP",
+      "newPassword": "Enter your new password",
+      "resetPassword": "Reset Password",
+      "passwordUpdated": "Password has been reset!",
+      "resendOtp": "Resend OTP"
+    },
+    "contactUs": {
+      "title": "Contact Us",
+      "support": "Support",
+      "description": "Feel free to use the form or drop us an email. A phone call works too.",
+      "name": "Name",
+      "phone": "Phone No.",
+      "issueType": "Type of Issue",
+      "descriptionField": "Description",
+      "submit": "Submit",
+      "phoneNumber": "+91 80508 XXXXX",
+      "email": "support.agrodhara@gmail.com"
+    },
+    "profile": {
+      "title": "Profile",
+      "edit": "Edit Profile",
+      "logout": "Logout"
+    },
+    "editProfile": {
+      "title": "Edit Farmer Profile",
+      "update": "Update Profile",
+      "name": "Name",
+      "phone": "Phone",
+      "address": "Address",
+      "yearsInFarming": "Years in Farming",
+      "yearsInCrop": "Years in Crop",
+      "totalPlotSize": "Total Plot Size",
+      "cropPlotSize": "Crop Plot Size",
+      "geolocation": "Geolocation",
+      "soilType": "Soil Type",
+      "soilTesting": "Soil Testing",
+      "openToSoilTesting": "Open to Soil Testing",
+      "currentYield": "Current Yield",
+      "quantityAvailable": "Quantity Available",
+      "cropVariety": "Crop Variety",
+      "ratePerQuintal": "Rate per Quintal",
+      "farmingType": "Farming Type",
+      "lastYearYield": "Last Year Yield",
+      "lastYearQuantitySold": "Last Year Quantity Sold",
+      "lastYearSellingPrice": "Last Year Selling Price",
+      "sowingDate": "Sowing Date",
+      "harvestDate": "Harvest Date",
+      "proneToNaturalCalamities": "Prone to Natural Calamities",
+      "calamityType": "Calamity Type",
+      "impactDuration": "Impact Duration (days)",
+      "impactSeverity": "Impact Severity",
+      "productionCost": "Production Cost",
+      "maxExpenseCategory": "Max Expense Category",
+      "usesCombineHarvester": "Uses Combine Harvester",
+      "harvesterCharges": "Harvester Charges",
+      "sustainablePractices": "Sustainable Practices",
+      "governmentSchemes": "Government Schemes",
+      "preferredPaymentMethod": "Preferred Payment Method",
+      "accessToStorage": "Access to Storage",
+      "awareOfGiBenefits": "Aware of GI Benefits"
+    },
+    "farmers": {
+      "management": "Farmers Management",
+      "fpoId": "FPO ID:",
+      "noFarmers": "No farmers found. Add your first farmer!",
+      "addFarmer": "Add New Farmer",
+      "active": "Active",
+      "locationNotSpecified": "Location not specified",
+      "noContact": "No contact",
+      "confirmDelete": "Confirm Delete",
+      "deleteMessage": "Are you sure you want to delete this farmer?",
+      "noPhoneNumber": "This farmer has no phone number recorded.",
+      "verified": "verified",
+      "notVerified": "not verified",
+      "callConfirm": "Are you sure you want to call this farmer?",
+  "callFarmer": "Call Farmer",
+            "bulkaddFarmer": "Bulk Add Farmers",
+            "primaryCrop": "Primary Crop",
+            "farmersFound": "farmers found",
+            "area": "Area",
+            "basicInfo": "Basic Information",
+            "contact": "Contact",
+            "location": "Location",
+            "farmingDetails": "Farming Details",
+            "yearsFarming": "Years of Farming",
+            "soilTesting": "Soil Testing",
+            "paymentMethod": "Payment Method",
+            "lastUpdated": "Last Updated",
+  "quantity": "Quantity",
+  "crops": "Crops"
+            
+    },
+    "addFarmer": {
+      "title": "Add New Farmer",
+      "fpoId": "Your FPO ID: {fpoId}",
+      "farmerDetails": "Farmer Details",
+      "farmerName": "Farmer Name",
+      "contactNumber": "Contact Number",
+      "houseNumber": "House No",
+      "villageName": "Village Name",
+      "gramPanchayat": "Gram Panchayat",
+      "pincode": "Pincode",
+      "pincodeHelper": "Enter 6-digit pincode to auto-fill location details",
+      "block": "Block",
+      "districtName": "District Name",
+      "stateName": "State Name",
+      "yearsInFarming": "Years in Farming",
+      "yearsInGrowingCrop": "Years in Growing Crop",
+      "farmPlotDetails": "Farm and Plot Details",
+      "totalPlotSize": "Total Plot Size",
+      "totalPlotUnit": "Total Plot Unit",
+      "soilTestingDone": "Soil Testing Done?",
+      "openToSoilTesting": "Open to Soil Testing?",
+      "calamityInfo": "Calamity Information",
+      "proneToCalamities": "Prone to Calamities?",
+      "calamityType": "Type of Calamity",
+      "impactDurationDays": "Impact Duration (days)",
+      "impactSeverity": "Impact Severity",
+      "sustainablePractices": "Sustainable Practices",
+      "willingToAdopt": "Willing to Adopt Sustainable Farming?",
+      "participatesInGovtSchemes": "Participates in Government Schemes?",
+      "preferredPaymentMethod": "Preferred Payment Method",
+      "farmerCrops": "Farmer Crops",
+      "addNewCrop": "Add New Crop",
+      "cropVariety": "Crop Variety",
+      "subVariety": "Sub-Variety",
+      "grade": "Grade",
+      "dateOfSowing": "Date of Sowing",
+      "farmingType": "Farming Type",
+      "dateOfHarvesting": "Date of Harvesting",
+      "expectedHarvestQuantity": "Expected Harvest Quantity",
+      "noCrops": "No crops added yet",
+      "addedCrops": "Added Crops",
+      "sowing": "Sowing:",
+      "harvest": "Harvest:",
+      "expectedHarvest": "Expected Harvest:"
+    },
+    "products": {
+      "createListing": "Create New Listing",
+      "product": "Product",
+      "variety": "Variety",
+      "grade": "Grade",
+      "quantity": "Quantity",
+      "costPerQuantity": "Cost per Quantity",
+      "addNote": "Add Note",
+      "total": "Total",
+      "portalCharges": "I understand that I have to pay additional Portal Charges ₹423.6 upon Successful Order Completion."
+    },
+    "validation": {
+      "required": "{field} is required",
+      "phoneDigits": "Phone number must be 10 digits",
+      "minChars": "{field} must be at least {count} characters",
+      "invalid": "Invalid {field}"
+    },
+
+
+
+
+
+
+    "whoweare":{
+      "title": "Who We Are",
+
+      "intro": "AgroDhara is a tech-powered agri-commerce platform that connects Farmer Producer Organizations (FPOs) directly with institutional buyers. We solve supply chain inefficiencies by aggregating quality produce, offering real-time visibility, and enabling digital transactions — all on one unified platform. Our aim is to build a transparent, sustainable, and scalable agri-marketplace that empowers farmers and brings traceability to the food supply chain.",
+
+
+
+
+
+
+
+
+
+      "aboutUsTitle": "About Us",
+      "aboutUsDescription": "AgroDhara Private Limited is a purpose-driven agri-tech company working at the intersection of technology, sustainability, and rural empowerment. We collaborate directly with Farmer Producer Organizations (FPOs) to streamline the aggregation, procurement, and sale of agricultural produce. Our platform is designed to reduce inefficiencies in the supply chain, increase farmer incomes, and ensure high-quality produce reaches large institutional buyers.",
+  
+      "missionTitle": "Mission",
+      "missionDescription": "To empower FPOs and smallholder farmers through digital market access, supply chain transparency, and climate-smart technologies — ensuring better prices, reduced wastage, and stronger rural economies.",
+  
+      "visionTitle": "Vision",
+      "visionDescription": "To become India's most trusted agri-commerce platform, fostering sustainable agriculture, data-driven decisions, and inclusive growth in the rural economy.",
+
+
+
+
+
+
+
+
+
+
+
+
+      "description": "Agrodhara is a platform that connects farmers with buyers, helping them sell their produce directly and efficiently. We aim to empower farmers by providing them with the tools and resources they need to succeed in the agricultural market.",
+      "mission": "Our Mission",
+      "vision": "Our Vision",
+      "values": "Our Values",
+      "team": "Our Team",
+      "contact": "Contact Us"
+    }
+  }
+
+  

@@ -1,0 +1,330 @@
+{
+  "sections": [
+    {
+      "title": "Section 1: Farmer Details",
+      "fields": [
+        {
+          "name": "farmer_name",
+          "label": "Farmer Name",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "contact_number",
+          "label": "Contact Number",
+          "type": "text",
+          "required": true,
+          "keyboardType": "phone-pad"
+        },
+        {
+          "name": "village_name",
+          "label": "Village Name",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "district_name",
+          "label": "District Name",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "state_name",
+          "label": "State Name",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "years_in_farming",
+          "label": "Years in Farming",
+          "type": "picker",
+          "options": ["1-5", "6-10", "10+"],
+          "required": true
+        },
+        {
+          "name": "years_in_growing_crop",
+          "label": "Years in Growing Crop",
+          "type": "picker",
+          "options": ["1-5", "6-10", "10+"],
+          "required": true
+        }
+      ]
+    },
+    {
+      "title": "Section 2: Farm and Plot Details",
+      "fields": [
+        {
+          "name": "total_plot_size",
+          "label": "Total Plot Size",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "total_plot_unit",
+          "label": "Total Plot Unit",
+          "type": "picker",
+          "options": ["Kattha", "Bigha", "Acre"],
+          "required": true
+        },
+        {
+          "name": "crop_plot_size",
+          "label": "Crop Plot Size",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "crop_plot_unit",
+          "label": "Crop Plot Unit",
+          "type": "picker",
+          "options": ["Kattha", "Bigha", "Acre"],
+          "required": true
+        },
+        {
+          "name": "soil_type",
+          "label": "Soil Type",
+          "type": "picker",
+          "options": ["Sandy Loam", "Clay", "Loamy", "Silty", "Peaty", "Chalky"],
+          "required": true
+        },
+        {
+          "name": "soil_testing_done",
+          "label": "Soil Testing Done?",
+          "type": "picker",
+          "options": ["Yes", "No"],
+          "required": true
+        },
+        {
+          "name": "open_to_soil_testing",
+          "label": "Open to Soil Testing?",
+          "type": "picker",
+          "options": ["Yes", "No"],
+          "required": true
+        }
+      ]
+    },
+    {
+      "title": "Section 3: Produce and Yield Information",
+      "fields": [
+        {
+          "name": "current_yield",
+          "label": "Current Yield (quintals)",
+          "type": "number",
+          "step": 0.01,
+          "required": true,
+          "placeholder": "Enter current yield in quintals",
+          "validation": {
+            "required": "Yield is required",
+            "min": 0,
+            "errorMessage": "Must be a non-negative number"
+          }
+        },
+        {
+          "name": "crop_variety",
+          "label": "Variety of Crop Grown",
+          "type": "picker",
+          "required": true,
+          "options": [
+            "Kalanamak rice",
+            "Foxnuts(makhana)"
+          ],
+          "validation": {
+            "required": "Crop variety is required"
+          }
+        },
+        {
+          "name": "crop_sub_variety",
+          "label": "Sub-Variety of Crop Grown",
+          "type": "picker",
+          "required": true,
+          "dynamicOptions": {
+            "dependsOn": "crop_variety",
+            "values": {
+              "Foxnuts(makhana)": [
+                "Suta 3-4 (9-12.5mm)",
+                "Suta 4-5 (12.5-15.5mm)",
+                "Suta 4+ (Multi-Size) (12.5-24mm)",
+                "Suta 5-6 Pure/HP (15.7-19mm)",
+                "Suta 5+ Non-HP (15.75-24mm)",
+                "Suta 5+ HP (15.75-24mm)",
+                "Suta 6+ Non-HP (19-24mm)",
+                "Suta 6+ HP (19-24mm)"
+              ],
+              "Kalanamak rice": [
+                "KN3",
+                "KN 207",
+                "KN 208",
+                "KN 209",
+                "PUSA 1638",
+                "PUSA 1652",
+                "KIRAN"
+              ]
+            }
+          },
+          "validation": {
+            "required": "Sub-variety is required"
+          }
+        },
+        {
+          "name": "farming_type",
+          "label": "Farming Type",
+          "type": "picker",
+          "required": true,
+          "options": [
+            "Organic",
+            "Conventional",
+            "Natural Farming",
+            "Integrated Farming",
+            "Mixed Farming"
+          ],
+          "placeholder": "Select farming method"
+        }
+      ]
+    },
+    {
+      "title": "Section 4: Historical Data",
+      "fields": [
+        {
+          "name": "last_year_yield",
+          "label": "Last Year Yield (kg)",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "last_year_quantity_sold",
+          "label": "Last Year Quantity Sold (kg)",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "last_year_selling_price",
+          "label": "Last Year Selling Price (per kg)",
+          "type": "number",
+          "required": true
+        }
+      ]
+    },
+    {
+      "title": "Section 5: Seasonal Data",
+      "fields": [
+        {
+          "name": "sowing_date",
+          "label": "Date of Sowing (Current Season)",
+          "type": "date",
+          "required": true,
+          "placeholder": "Select sowing date"
+        },
+        {
+          "name": "harvest_date",
+          "label": "Date of Harvest (Current Season)",
+          "type": "date",
+          "required": true,
+          "placeholder": "Select harvest date"
+        },
+        {
+          "name": "prone_to_calamities",
+          "label": "Is Your Area Prone to Natural Calamities?",
+          "type": "radio",
+          "required": true,
+          "options": ["Yes", "No"]
+        },
+        {
+          "name": "calamity_type",
+          "label": "Type of Calamity",
+          "type": "text",
+          "required": false,
+          "placeholder": "Specify type of calamity",
+          "showIf": {
+            "field": "prone_to_calamities",
+            "value": "Yes"
+          }
+        },
+        {
+          "name": "impact_duration_days",
+          "label": "Impact Duration (in days)",
+          "type": "number",
+          "required": false,
+          "placeholder": "Enter impact duration in days",
+          "showIf": {
+            "field": "prone_to_calamities",
+            "value": "Yes"
+          }
+        },
+        {
+          "name": "impact_severity",
+          "label": "Severity of Impact on Produce",
+          "type": "text",
+          "required": false,
+          "placeholder": "Describe the impact severity",
+          "showIf": {
+            "field": "prone_to_calamities",
+            "value": "Yes"
+          }
+        }
+      ]
+    },
+    {
+      "title": "Section 6: Production Costs and Inputs",
+      "fields": [
+        {
+          "name": "production_cost_per_unit",
+          "label": "Production Cost per Unit",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "production_cost_unit",
+          "label": "Production Cost Unit",
+          "type": "picker",
+          "options": ["INR", "USD"],
+          "required": true
+        },
+        {
+          "name": "max_expense_category",
+          "label": "Max Expense Category",
+          "type": "picker",
+          "options": ["Labor", "Seeds", "Fertilizers", "Pesticides"],
+          "required": true
+        },
+        {
+          "name": "uses_combine_harvesters",
+          "label": "Uses Combine Harvesters?",
+          "type": "picker",
+          "options": ["Yes", "No"],
+          "required": true
+        },
+        {
+          "name": "harvester_charges_per_quintal",
+          "label": "Harvester Charges per Quintal",
+          "type": "number",
+          "required": false
+        }
+      ]
+    },
+    {
+      "title": "Section 7: Additional Information",
+      "fields": [
+        {
+          "name": "willing_to_adopt_sustainable_farming",
+          "label": "Willing to Adopt Sustainable Farming?",
+          "type": "picker",
+          "options": ["Yes", "No"],
+          "required": true
+        },
+        {
+          "name": "participates_in_govt_schemes",
+          "label": "Participates in Government Schemes?",
+          "type": "picker",
+          "options": ["Yes", "No"],
+          "required": true
+        },
+        {
+          "name": "preferred_payment_method",
+          "label": "Preferred Payment Method",
+          "type": "picker",
+          "options": ["Cash", "Bank Transfer", "Mobile Payment"],
+          "required": true
+        }
+      ]
+    }
+  ]
+}
