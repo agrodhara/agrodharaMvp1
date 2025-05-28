@@ -28,7 +28,7 @@ export default function EditFpoProfile() {
           throw new Error('Access token is not available');
         }
 
-        const response = await axios.get(`https://agrodhara-18yb.onrender.com/api/fpo/profile/${fpoid}`, {
+        const response = await axios.get(`http://3.110.114.250:5000/api/fpo/profile/${fpoid}`, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
@@ -55,7 +55,7 @@ console.log('Saving FPO details:', fpoDetails); // Debugging line
 
     try {
       const accessToken = await getAccessToken();
-      await axios.put(`https://agrodhara-18yb.onrender.com/api/fpo/profile/update/${fpoid}`, fpoDetails, {
+      await axios.put(`http://3.110.114.250:5000/api/fpo/profile/update/${fpoid}`, fpoDetails, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -167,30 +167,30 @@ console.log('Saving FPO details:', fpoDetails); // Debugging line
             <View style={styles.inputContainer}>
               <Text style={styles.label}>State</Text>
               <TextInput
-                style={[styles.input, editable ? styles.editableInput : styles.disabledInput]}
+                style={[styles.input,  styles.disabledInput]}
                 value={fpoDetails.state}
                 onChangeText={(text) => handleInputChange('state', text)}
-                editable={editable}
+                editable={false}
                 placeholder="Enter state"
               />
             </View>
             <View style={styles.inputContainer}>
               <Text style={styles.label}>District</Text>
               <TextInput
-                style={[styles.input, editable ? styles.editableInput : styles.disabledInput]}
+                style={[styles.input, styles.disabledInput]}
                 value={fpoDetails.district}
                 onChangeText={(text) => handleInputChange('district', text)}
-                editable={editable}
+                editable={false}
                 placeholder="Enter district"
               />
             </View>
             <View style={styles.inputContainer}>
               <Text style={styles.label}>Block Name</Text>
               <TextInput
-                style={[styles.input, editable ? styles.editableInput : styles.disabledInput]}
+                style={[styles.input, styles.disabledInput]}
                 value={fpoDetails.villages_covered}
                 onChangeText={(text) => handleInputChange('villages_covered', text)}
-                editable={editable}
+                editable={false}
                 placeholder="Enter block name"
               />
             </View>

@@ -1,6 +1,6 @@
 // API configuration
 // export const API_BASE_URL = 'http://10.0.2.2:5000/api'; // For Android emulator pointing to localhost
-export const API_BASE_URL = 'https://agrodhara-18yb.onrender.com'; // For web or iOS simulator
+export const API_BASE_URL = 'http://3.110.114.250:5000'; // For web or iOS simulator
 
 // For production, use the server URL
 // export const API_BASE_URL = 'https://yourproductionapi.com/api';

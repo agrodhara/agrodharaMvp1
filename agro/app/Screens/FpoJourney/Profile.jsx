@@ -9,6 +9,7 @@ import { AntDesign } from '@expo/vector-icons';
 import { Link } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import i18n from '../../languagejsons/i18n'; // Importing the i18n instance
+import GreenHeader from "./Header";
 
 const Test = () => {
   const router = useRouter();
@@ -550,14 +551,11 @@ const Test = () => {
     <ScrollView style={styles.container}>
      
       
-      {/* Original profile header - keep it or remove it as needed */}
-      <View style={styles.header}>
-        <Text style={styles.title}>FPO Profile</Text>
-        <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-          <Text style={styles.logoutText}>Logout</Text>
-        </TouchableOpacity>
-      </View>
 
+<GreenHeader 
+  title="My Dashboard" 
+  subtitle="Empowering Farmers Daily" 
+/>
 
  {/* New Header with Logo and Weather */}
  <View style={styles.section}>
@@ -647,7 +645,7 @@ const Test = () => {
                         <Text style={styles.totalValue}>₹{orders[currentTradeIndex].totalPrice}</Text>
                       </View>
                     </View>
-                    
+                    Create Profile
                     {/* Right button */}
                     <TouchableOpacity 
                       style={styles.notifyBtn}
@@ -726,15 +724,7 @@ const Test = () => {
               />
             </TouchableOpacity>
             
-            <TouchableOpacity 
-              style={[styles.gridButton, { borderColor: '#FF9800' }]}
-            >
-              <Image 
-                source={require('../../../assets/images/button2.png')}
-                style={styles.buttonImage}
-                resizeMode="contain"
-              />
-            </TouchableOpacity>
+           
             
 
 
@@ -760,7 +750,7 @@ const Test = () => {
           <View style={styles.buttonRow}>
             <TouchableOpacity 
               style={[styles.gridButton, { borderColor: '#4CAF50' }]}
-              onPress={() => { console.log('Button 4 clicked'); Alert.alert('Button 4', 'Button 4 clicked!'); }}
+              
             >
               <Image 
                 source={require('../../../assets/images/button4.png')}
@@ -780,16 +770,7 @@ const Test = () => {
               />
             </TouchableOpacity>
             
-            <TouchableOpacity 
-              style={[styles.gridButton, { borderColor: '#673AB7' }]}
-              onPress={handleLogout}
-            >
-              <Image 
-                source={require('../../../assets/images/button6.png')}
-                style={styles.buttonImage}
-                resizeMode="contain"
-              />
-            </TouchableOpacity>
+            
           </View>
           
           <View style={styles.buttonRow}>
@@ -819,17 +800,7 @@ const Test = () => {
           
          
 
-            <TouchableOpacity 
-              style={[styles.gridButton, { borderColor: '#009688' }]}
-
-             
-            >
-              <Image 
-                source={require('../../../assets/images/button9.png')}
-                style={styles.buttonImage}
-                resizeMode="contain"
-              />
-            </TouchableOpacity>
+          
           </View>
         </View>
       </View>
@@ -849,8 +820,8 @@ const Test = () => {
           <Text style={styles.noProfileText}>
             No profile information available.
           </Text>
-          <TouchableOpacity style={styles.editButton} onPress={handleEdit}>
-            <Text style={styles.editButtonText}>Create Profile</Text>
+          <TouchableOpacity style={styles.editButton} onPress={handleLogout}>
+            <Text style={styles.editButtonText}>Refresh</Text>
           </TouchableOpacity>
         </View>
       )}

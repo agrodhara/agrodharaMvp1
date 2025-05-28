@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, Image, TouchableOpacity, Alert, ScrollView } from "react-native";
+import { View, Text, TextInput, Image, TouchableOpacity, Alert, ScrollView, ActivityIndicator } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 
@@ -20,6 +20,8 @@ const ContactUs = () => {
     issueType: "",
     description: "",
   });
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const validateForm = () => {
     let valid = true;
@@ -76,8 +78,9 @@ const ContactUs = () => {
 
   const handleSubmit = async () => {
     if (validateForm()) {
+      setIsSubmitting(true);
       try {
-        const response = await fetch("https://agrodhara-18yb.onrender.com/api/fpo/contact/contact", {
+        const response = await fetch("http://3.110.114.250:5000/api/fpo/contact/contact", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(formData),
@@ -106,105 +109,118 @@ const ContactUs = () => {
         }
       } catch (err) {
         console.error(err);
-        Alert.alert("Error", "Failed to connect to the server.");
+        Alert.alert("Error", "Failed to connect to the server. Please try again later.");
+      } finally {
+        setIsSubmitting(false);
       }
     }
   };
   
   return (
-
-<ScrollView>
-
-    <View style={styles.container}>
-      {/* Header with back button */}
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-          <Ionicons name="arrow-back" size={28} color="black" />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Support</Text>
-      </View>
-
-      {/* Top Image */}
-      <Image
-        source={{
-          uri: "https://s3-alpha-sig.figma.com/img/1f1c/34c7/a0297866238c13b96c6b6821c5b68b7d?Expires=1744588800&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=R5QUfXwu30Adht88N3ZoegxtSalAmLNkNc606PXCUbny3VfApnyKJHIESXShOriEeX1Od-RCBiCFN62mrXuNMo9rUoBHIK1I~bHgIlEb80d9taTfs3wsKFGLabYgY7Hc9k0Gvp2nbzqHYRomebDi9BuXF6iGzY-uqGCpsZ8eMj4qlfchb6ycZHCrpP5t-boOqehfFuG4Nzw97DLv1X0mWLxAC8kTucFWGJCd-3YT~0rPqIAC1cGHqJaJqDBP54dzLh8gCJoraMJxHyZS0pZuD9KubJnKbBDcbqKeMVVs33fUgMsY3IiVqjfuvcYVR7jzG0m6wp~YKLhX30CcmlB31w__",
-        }}
-        style={styles.image}
-      />
-
-      {/* Title */}
-      <Text style={styles.title}>Contact Us</Text>
-
-      {/* Description */}
-      <Text style={styles.description}>
-        Feel free to use the form or drop us an email. A phone call works too.
-      </Text>
-
-      {/* Form */}
-      <View style={styles.form}>
-        <TextInput
-          style={styles.input}
-          placeholder="Name"
-          value={formData.name}
-          onChangeText={(text) => setFormData({ ...formData, name: text })}
-        />
-        {errors.name ? <Text style={styles.errorText}>{errors.name}</Text> : null}
-
-        <TextInput
-          style={styles.input}
-          placeholder="Phone No."
-          keyboardType="phone-pad"
-          value={formData.phone}
-          onChangeText={(text) => setFormData({ ...formData, phone: text })}
-        />
-        {errors.phone ? <Text style={styles.errorText}>{errors.phone}</Text> : null}
-
-        <TextInput
-          style={styles.input}
-          placeholder="Email"
-          keyboardType="email-address"
-          value={formData.email}
-          onChangeText={(text) => setFormData({ ...formData, email: text })}
-        />
-        {errors.email ? <Text style={styles.errorText}>{errors.email}</Text> : null}
-
-        <TextInput
-          style={styles.input}
-          placeholder="Type of Issue"
-          value={formData.issueType}
-          onChangeText={(text) => setFormData({ ...formData, issueType: text })}
-        />
-        {errors.issueType ? <Text style={styles.errorText}>{errors.issueType}</Text> : null}
-
-        <TextInput
-          style={[styles.input, styles.textArea]}
-          placeholder="Description"
-          multiline
-          numberOfLines={4}
-          value={formData.description}
-          onChangeText={(text) => setFormData({ ...formData, description: text })}
-        />
-        {errors.description ? (
-          <Text style={styles.errorText}>{errors.description}</Text>
-        ) : null}
-
-        <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
-          <Text style={styles.submitText}>Submit</Text>
-        </TouchableOpacity>
-      </View>
-
-      {/* Contact Info */}
-      <View style={styles.contactContainer}>
-        <View style={styles.contactRow}>
-          <Ionicons name="call" size={20} color="green" />
-          <Text style={styles.contactText}>+91 80508 XXXXX</Text>
+    <ScrollView>
+      <View style={styles.container}>
+        {/* Header with back button */}
+        <View style={styles.header}>
+          <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
+            <Ionicons name="arrow-back" size={28} color="black" />
+          </TouchableOpacity>
+          <Text style={styles.headerTitle}>Support</Text>
         </View>
-        <View style={styles.contactRow}>
-          <Ionicons name="mail" size={20} color="green" />
-          <Text style={styles.contactText}>support.agrodhara@gmail.com</Text>
+
+        {/* Top Image */}
+        <Image
+          source={{
+            uri: "https://s3-alpha-sig.figma.com/img/1f1c/34c7/a0297866238c13b96c6b6821c5b68b7d?Expires=1744588800&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=R5QUfXwu30Adht88N3ZoegxtSalAmLNkNc606PXCUbny3VfApnyKJHIESXShOriEeX1Od-RCBiCFN62mrXuNMo9rUoBHIK1I~bHgIlEb80d9taTfs3wsKFGLabYgY7Hc9k0Gvp2nbzqHYRomebDi9BuXF6iGzY-uqGCpsZ8eMj4qlfchb6ycZHCrpP5t-boOqehfFuG4Nzw97DLv1X0mWLxAC8kTucFWGJCd-3YT~0rPqIAC1cGHqJaJqDBP54dzLh8gCJoraMJxHyZS0pZuD9KubJnKbBDcbqKeMVVs33fUgMsY3IiVqjfuvcYVR7jzG0m6wp~YKLhX30CcmlB31w__",
+          }}
+          style={styles.image}
+        />
+
+        {/* Title */}
+        <Text style={styles.title}>Contact Us</Text>
+
+        {/* Description */}
+        <Text style={styles.description}>
+          Feel free to use the form or drop us an email. A phone call works too.
+        </Text>
+
+        {/* Form */}
+        <View style={styles.form}>
+          <TextInput
+            style={styles.input}
+            placeholder="Name"
+            value={formData.name}
+            onChangeText={(text) => setFormData({ ...formData, name: text })}
+            editable={!isSubmitting}
+          />
+          {errors.name ? <Text style={styles.errorText}>{errors.name}</Text> : null}
+
+          <TextInput
+            style={styles.input}
+            placeholder="Phone No."
+            keyboardType="phone-pad"
+            value={formData.phone}
+            onChangeText={(text) => setFormData({ ...formData, phone: text })}
+            editable={!isSubmitting}
+          />
+          {errors.phone ? <Text style={styles.errorText}>{errors.phone}</Text> : null}
+
+          <TextInput
+            style={styles.input}
+            placeholder="Email"
+            keyboardType="email-address"
+            value={formData.email}
+            onChangeText={(text) => setFormData({ ...formData, email: text })}
+            editable={!isSubmitting}
+          />
+          {errors.email ? <Text style={styles.errorText}>{errors.email}</Text> : null}
+
+          <TextInput
+            style={styles.input}
+            placeholder="Type of Issue"
+            value={formData.issueType}
+            onChangeText={(text) => setFormData({ ...formData, issueType: text })}
+            editable={!isSubmitting}
+          />
+          {errors.issueType ? <Text style={styles.errorText}>{errors.issueType}</Text> : null}
+
+          <TextInput
+            style={[styles.input, styles.textArea]}
+            placeholder="Description"
+            multiline
+            numberOfLines={4}
+            value={formData.description}
+            onChangeText={(text) => setFormData({ ...formData, description: text })}
+            editable={!isSubmitting}
+          />
+          {errors.description ? (
+            <Text style={styles.errorText}>{errors.description}</Text>
+          ) : null}
+
+          <TouchableOpacity 
+            style={[styles.submitButton, isSubmitting && styles.submitButtonDisabled]} 
+            onPress={handleSubmit}
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? (
+              <ActivityIndicator color="#fff" />
+            ) : (
+              <Text style={styles.submitText}>Submit</Text>
+            )}
+          </TouchableOpacity>
+        </View>
+
+        {/* Contact Info */}
+        <View style={styles.contactContainer}>
+          <View style={styles.contactRow}>
+            <Ionicons name="call" size={20} color="green" />
+            <Text style={styles.contactText}>+91 98316 07402</Text>
+          </View>
+          <View style={styles.contactRow}>
+            <Ionicons name="mail" size={20} color="green" />
+            <Text style={styles.contactText}>Agrodhara1@gmail.com</Text>
+          </View>
         </View>
       </View>
-    </View>
     </ScrollView>
   );
 };
@@ -279,6 +295,9 @@ const styles = {
     alignItems: "center",
     marginTop: 10,
     elevation: 3,
+  },
+  submitButtonDisabled: {
+    backgroundColor: "#7f8c8d",
   },
   submitText: {
     color: "#fff",

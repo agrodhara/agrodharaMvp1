@@ -1,10 +1,10 @@
 {
   "expo": {
-    "name": " Agrodhara",
+    "name": "Agrodhara",
     "slug": "Agrodhara",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/AppLogo.jpg",
+    "icon": "./assets/images/icon.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
@@ -13,7 +13,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/AppLogo.jpg",
+        "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
       "package": "com.Agrodhara.com"
@@ -35,7 +35,15 @@
         }
       ],
       "expo-secure-store",
-      "expo-localization"
+      "expo-localization",
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "usesCleartextTraffic": true
+          }
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true

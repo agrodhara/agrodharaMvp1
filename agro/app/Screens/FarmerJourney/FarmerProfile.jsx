@@ -5,7 +5,7 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import { FontAwesome5, Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { API_BASE_URL } from '../../services/config';
-logo
+
 const FarmerProfilePage = () => {
     const router = useRouter();
     const { id } = useLocalSearchParams(); // Get the farmer ID from the route parameters

@@ -54,9 +54,9 @@ const api = useApi();
           <Text style={styles.variety}>{item.variety}</Text>
         </View>
         <View style={styles.productDetails}>
-          <Text style={styles.detailText}>Quantity: {item.quantity} units</Text>
+          <Text style={styles.detailText}>Quantity: {item.quantity}/Quintal</Text>
           <Text style={styles.detailText}>Grade: {item.grade}</Text>
-          <Text style={styles.detailText}>Cost: ₹{item.cost_per_quantity}/unit</Text>
+          <Text style={styles.detailText}>Cost: ₹{item.cost_per_quantity}/Quintal</Text>
           <Text style={styles.detailText}>Total: ₹{item.total}</Text>
           {item.note && <Text style={styles.noteText}>Note: {item.note}</Text>}
         </View>
@@ -77,11 +77,11 @@ const api = useApi();
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Products</Text>
         <TouchableOpacity 
-          style={styles.addButton}
-          onPress={() => navigation.navigate('AddProduct', { id: fpoId })}
-        >
-          <Ionicons name="add-circle" size={24} color="#4CAF50" />
-        </TouchableOpacity>
+  style={styles.addButton}
+  onPress={() => navigation.replace('AddProduct', { id: fpoId,  existingProducts: JSON.stringify(productsData)}, console.log('Navigating to AddProduct with FPO ID:', productsData))}
+>
+  <Ionicons name="add-circle" size={24} color="#4CAF50" />
+</TouchableOpacity>
       </View>
 
       {productsData.length === 0 ? (

@@ -12,7 +12,7 @@ import statesData from './statedistrict.json';
 import i18n from '../../languagejsons/i18n'; // Importing the i18n instance
 
 // Define the API URL
-const API_URL = 'https://agrodhara-18yb.onrender.com';
+const API_URL = 'http://3.110.114.250:5000';
 
 console.log("Platform:", Platform.OS, Platform.Version);
 

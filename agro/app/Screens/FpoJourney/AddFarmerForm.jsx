@@ -8,7 +8,7 @@ import { AntDesign, MaterialCommunityIcons, FontAwesome5 } from '@expo/vector-ic
 import { useApi } from '../../services/api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import i18n from '../../languagejsons/i18n'; // Importing the i18n instance
-
+import axios from 'axios';
 const FarmerForm = () => {
   const params = useLocalSearchParams();
   const router = useRouter();
@@ -97,43 +97,50 @@ const api = useApi();
   });
   const [showCropSowingPicker, setShowCropSowingPicker] = useState(false);
   const [showCropHarvestPicker, setShowCropHarvestPicker] = useState(false);
-  const [availableCropVarieties, setAvailableCropVarieties] = useState({
-    en: ['Foxnuts (makhana)', 'Kalanamak rice'],
-    hi: ['फॉक्सनट्स (मखाना)', 'कलानामक चावल']
-  });
-  
-  const [availableSubVarieties, setAvailableSubVarieties] = useState({
-    en: {
-      'Foxnuts (makhana)': [
-        "Suta 3-4 (9-12.5mm)",
-        "Suta 4-5 (12.5-15.5mm)",
-        "Suta 4+ (Multi-Size) (12.5-24mm)",
-        "Suta 5-6 Pure/HP (15.7-19mm)",
-        "Suta 5+ Non-HP (15.75-24mm)",
-        "Suta 5+ HP (15.75-24mm)",
-        "Suta 6+ Non-HP (19-24mm)",
-        "Suta 6+ HP (19-24mm)"
-      ],
-      'Kalanamak rice': [
-        "KN3", "KN 207", "KN 208", "KN 209", "PUSA 1638", "PUSA 1652", "KIRAN"
-      ]
-    },
-    hi: {
-      'फॉक्सनट्स (मखाना)': [
-        "सूता 3-4 (9-12.5 मिमी)",
-        "सूता 4-5 (12.5-15.5 मिमी)",
-        "सूता 4+ (मल्टी-साइज़) (12.5-24 मिमी)",
-        "सूता 5-6 प्योर/HP (15.7-19 मिमी)",
-        "सूता 5+ नॉन-HP (15.75-24 मिमी)",
-        "सूता 5+ HP (15.75-24 मिमी)",
-        "सूता 6+ नॉन-HP (19-24 मिमी)",
-        "सूता 6+ HP (19-24 मिमी)"
-      ],
-      'कलानामक चावल': [
-        "KN3", "KN 207", "KN 208", "KN 209", "PUSA 1638", "PUSA 1652", "KIRAN"
-      ]
+  const [availableCropVarieties, setAvailableCropVarieties] = useState({ en: [], hi: [] });
+const [availableSubVarieties, setAvailableSubVarieties] = useState({ en: {}, hi: {} });
+
+
+
+
+useEffect(() => {
+  const fetchCropData = async () => {
+    try {
+      const varietiesRes = await api.get(`api/fpo/crops/crop-varieties`);
+      const subVarietiesRes = await api.get('api/fpo/crops/sub-varieties/');
+
+      const enVarieties = varietiesRes.data.map(v => v.name_en);
+      const hiVarieties = varietiesRes.data.map(v => v.name_hi);
+
+      const enSub = {};
+      const hiSub = {};
+
+      subVarietiesRes.data.forEach(sub => {
+        const enCrop = varietiesRes.data.find(v => v.id === sub.crop_variety_id)?.name_en;
+        const hiCrop = varietiesRes.data.find(v => v.id === sub.crop_variety_id)?.name_hi;
+
+        if (enCrop) {
+          if (!enSub[enCrop]) enSub[enCrop] = [];
+          enSub[enCrop].push(sub.name_en);
+        }
+
+        if (hiCrop) {
+          if (!hiSub[hiCrop]) hiSub[hiCrop] = [];
+          hiSub[hiCrop].push(sub.name_hi);
+        }
+      });
+
+      setAvailableCropVarieties({ en: enVarieties, hi: hiVarieties });
+      setAvailableSubVarieties({ en: enSub, hi: hiSub });
+    } catch (err) {
+      console.error("Error fetching crop data", err);
     }
-  });
+  };
+
+  fetchCropData();
+}, []);
+
+
 
   const [availableGrades] = useState(['A', 'B', 'C', 'D']);
   const availableFarmingTypes = {

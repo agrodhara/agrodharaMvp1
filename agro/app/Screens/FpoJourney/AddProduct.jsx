@@ -5,6 +5,11 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useApi } from '../../services/api';
 import { useNavigation } from '@react-navigation/native';
 import { MaterialIcons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useMemo } from 'react';
+import i18n from '../../languagejsons/i18n'; // Importing the i18n instance
+import axios from 'axios';
+
 
 export default function CreateListing() {
   const [product, setProduct] = useState('');
@@ -25,33 +30,80 @@ export default function CreateListing() {
     setTotal(quantity * costPerQuantity);
   }, [quantity, costPerQuantity]);
 
-  const products = [
-    { id: 1, name: 'Kalanamak' },
-    { id: 2, name: 'Fox nut' },
-  ];
 
-  const varieties = {
-    Kalanamak: [ 
-      "KN3",
-      "KN 207",
-      "KN 208",
-      "KN 209",
-      "PUSA 1638",
-      "PUSA 1652",
-      "KIRAN"
-    ],
-    'Fox nut': [
-      "Suta 3-4 (9-12.5mm)",
-      "Suta 4-5 (12.5-15.5mm)",
-      "Suta 4+ (Multi-Size) (12.5-24mm)",
-      "Suta 5-6 Pure/HP (15.7-19mm)",
-      "Suta 5+ Non-HP (15.75-24mm)",
-      "Suta 5+ HP (15.75-24mm)",
-      "Suta 6+ Non-HP (19-24mm)",
-      "Suta 6+ HP (19-24mm)"
-    ],
-  };
 
+ 
+
+
+  const [language, setLanguage] = useState('en'); // Default to English
+
+  // Load language from AsyncStorage on component mount
+  useEffect(() => {
+    const loadLanguage = async () => {
+      const storedLanguage = await AsyncStorage.getItem('language');
+      if (storedLanguage) {
+        setLanguage(storedLanguage);
+        i18n.locale = storedLanguage; // Set the locale for i18n
+      } else {
+        console.log('No language set, defaulting to English');
+      }
+    };
+    loadLanguage();
+  }, []);
+
+  // Update i18n locale when language state changes
+  useEffect(() => {
+    i18n.locale = language; // Set the current locale
+  }, [language]);
+
+
+
+  const [availableCropVarieties, setAvailableCropVarieties] = useState({ en: [], hi: [] });
+  const [availableSubVarieties, setAvailableSubVarieties] = useState({ en: {}, hi: {} });
+ 
+ 
+ 
+ 
+ 
+ 
+  useEffect(() => {
+   const fetchCropData = async () => {
+     try {
+       const varietiesRes = await api.get(`api/fpo/crops/crop-varieties`);
+       const subVarietiesRes = await api.get('api/fpo/crops/sub-varieties/');
+ 
+       const enVarieties = varietiesRes.data.map(v => v.name_en);
+       const hiVarieties = varietiesRes.data.map(v => v.name_hi);
+ 
+       const enSub = {};
+       const hiSub = {};
+ 
+       subVarietiesRes.data.forEach(sub => {
+         const enCrop = varietiesRes.data.find(v => v.id === sub.crop_variety_id)?.name_en;
+         const hiCrop = varietiesRes.data.find(v => v.id === sub.crop_variety_id)?.name_hi;
+ 
+         if (enCrop) {
+           if (!enSub[enCrop]) enSub[enCrop] = [];
+           enSub[enCrop].push(sub.name_en);
+         }
+ 
+         if (hiCrop) {
+           if (!hiSub[hiCrop]) hiSub[hiCrop] = [];
+           hiSub[hiCrop].push(sub.name_hi);
+         }
+       });
+ 
+       setAvailableCropVarieties({ en: enVarieties, hi: hiVarieties });
+       setAvailableSubVarieties({ en: enSub, hi: hiSub });
+     } catch (err) {
+       console.error("Error fetching crop data", err);
+     }
+   };
+ 
+   fetchCropData();
+ }, []);
+ 
+ 
   const grades = ['A-grade', 'B-grade', 'C-grade', 'D-grade'];
 
   const handleConfirm = async () => {
@@ -111,44 +163,44 @@ export default function CreateListing() {
         <View style={styles.formContainer}>
           {/* Product Selection */}
           <View style={styles.inputGroup}>
-            <Text style={styles.label}>Product *</Text>
-            <View style={styles.pickerContainer}>
-              <Picker
-                selectedValue={product}
-                onValueChange={(itemValue) => {
-                  setProduct(itemValue);
-                  setVariety('');
-                }}
-                style={styles.picker}
-                dropdownIconColor="#4a7c59"
-              >
-                <Picker.Item label="Select Product" value="" />
-                {products.map((prod) => (
-                  <Picker.Item key={prod.id} label={prod.name} value={prod.name} />
-                ))}
-              </Picker>
-            </View>
-          </View>
+      <Text style={styles.label}>Product *</Text>
+      <View style={styles.pickerContainer}>
+        <Picker
+          selectedValue={product}
+          onValueChange={(itemValue) => {
+            setProduct(itemValue);
+            setVariety(''); // Reset sub-variety when crop variety changes
+          }}
+          style={styles.picker}
+          dropdownIconColor="#4a7c59"
+        >
+          <Picker.Item label="Select Product" value="" />
+          {availableCropVarieties[language].map((cropName, index) => (
+            <Picker.Item key={index} label={cropName} value={cropName} />
+          ))}
+        </Picker>
+      </View>
+    </View>
 
           {/* Variety Selection */}
           {product && (
-            <View style={styles.inputGroup}>
-              <Text style={styles.label}>Variety *</Text>
-              <View style={styles.pickerContainer}>
-                <Picker
-                  selectedValue={variety}
-                  onValueChange={(itemValue) => setVariety(itemValue)}
-                  style={styles.picker}
-                  dropdownIconColor="#4a7c59"
-                >
-                  <Picker.Item label="Select Variety" value="" />
-                  {varieties[product]?.map((varietyName, index) => (
-                    <Picker.Item key={index} label={varietyName} value={varietyName} />
-                  ))}
-                </Picker>
-              </View>
-            </View>
-          )}
+      <View style={styles.inputGroup}>
+        <Text style={styles.label}>Variety *</Text>
+        <View style={styles.pickerContainer}>
+          <Picker
+            selectedValue={variety}
+            onValueChange={(itemValue) => setVariety(itemValue)}
+            style={styles.picker}
+            dropdownIconColor="#4a7c59"
+          >
+            <Picker.Item label="Select Variety" value="" />
+            {availableSubVarieties[language][product]?.map((subVar, index) => (
+              <Picker.Item key={index} label={subVar} value={subVar} />
+            ))}
+          </Picker>
+        </View>
+      </View>
+    )}
 
           {/* Grade Selection */}
           <View style={styles.inputGroup}>
@@ -182,7 +234,7 @@ export default function CreateListing() {
 
           {/* Cost Input */}
           <View style={styles.inputGroup}>
-            <Text style={styles.label}>Price per Unit *</Text>
+            <Text style={styles.label}>Price per Quintal *</Text>
             <View style={styles.costInputContainer}>
               <Text style={styles.currencySymbol}>₹</Text>
               <TextInput
@@ -385,5 +437,30 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     fontWeight: '600',
+  },
+
+
+
+
+
+  
+
+  pickerContainer: {
+    backgroundColor: "#FFFFFF",
+    borderWidth: 1.5,
+    borderColor: "#D8E8D8",
+    borderRadius: 12,
+    overflow: 'hidden',
+    marginBottom: 8,
+  },
+  picker: {
+    height: 54, 
+    width: '100%',
+    color: "#1A3A1A",
+  },
+  pickerItem: {
+    fontSize: 17,
+    color: "#1A3A1A",
+    
   },
 });

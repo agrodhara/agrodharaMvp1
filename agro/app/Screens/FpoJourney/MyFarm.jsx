@@ -1,140 +1,140 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, Dimensions } from 'react-native';
 import { PieChart } from 'react-native-chart-kit';
-import Animated from 'react-native-reanimated';
+import Animated, { Easing } from 'react-native-reanimated';
 
 const MyFarm = () => {
   // Static data
-  const totalFarmers = 150;
-  const totalOrders = 300;
-  const availableOrders = 120;
-  const completedOrders = 180;
-  const pendingOrders = 50;
-  const totalRevenue = 50000; // Example revenue
-  const totalCrops = 200; // Example crops
+  const data = {
+    totalFarmers: 150,
+    totalOrders: 300,
+    availableOrders: 120,
+    completedOrders: 180,
+    pendingOrders: 50,
+    totalRevenue: 50000,
+    totalCrops: 200,
+  };
 
   // State for animated counters
-  const [farmersCount, setFarmersCount] = useState(0);
-  const [ordersCount, setOrdersCount] = useState(0);
-  const [availableCount, setAvailableCount] = useState(0);
-  const [completedCount, setCompletedCount] = useState(0);
-  const [pendingCount, setPendingCount] = useState(0);
-  const [revenueCount, setRevenueCount] = useState(0);
-  const [cropsCount, setCropsCount] = useState(0);
+  const [counters, setCounters] = useState({
+    farmers: 0,
+    orders: 0,
+    available: 0,
+    completed: 0,
+    pending: 0,
+    revenue: 0,
+    crops: 0,
+  });
 
-  // Animation function
-  const animateCount = (target, setCount) => {
-    const duration = 2000; // 5 seconds
-    const totalSteps = target; // Total steps to reach the target
-    const intervalTime = duration / totalSteps; // Time per step
+  // Format number with commas
+  const formatNumber = (num) => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
-    let count = 0;
-    const interval = setInterval(() => {
-      if (count < target) {
-        count++;
-        setCount(count);
-      } else {
-        clearInterval(interval);
+  // Animation function with easing
+  const animateCount = (target, key) => {
+    const duration = 1500;
+    const startTime = Date.now();
+    
+    const updateCounter = () => {
+      const elapsed = Date.now() - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      // Ease out function
+      const easedProgress = 1 - Math.pow(1 - progress, 3);
+      const currentValue = Math.floor(easedProgress * target);
+      
+      setCounters(prev => ({
+        ...prev,
+        [key]: currentValue
+      }));
+      
+      if (progress < 1) {
+        requestAnimationFrame(updateCounter);
       }
-    }, intervalTime);
+    };
+    
+    requestAnimationFrame(updateCounter);
   };
 
   useEffect(() => {
-    animateCount(totalFarmers, setFarmersCount);
-    animateCount(totalOrders, setOrdersCount);
-    animateCount(availableOrders, setAvailableCount);
-    animateCount(completedOrders, setCompletedCount);
-    animateCount(pendingOrders, setPendingCount);
-    animateCount(totalRevenue, setRevenueCount);
-    animateCount(totalCrops, setCropsCount);
+    animateCount(data.totalFarmers, 'farmers');
+    animateCount(data.totalOrders, 'orders');
+    animateCount(data.availableOrders, 'available');
+    animateCount(data.completedOrders, 'completed');
+    animateCount(data.pendingOrders, 'pending');
+    animateCount(data.totalRevenue, 'revenue');
+    animateCount(data.totalCrops, 'crops');
   }, []);
 
-  // Data for the donut chart
+  // Data for the donut chart with green shades
   const chartData = [
     {
       name: 'Available Orders',
-      population: availableOrders,
-      color: '#4CAF50',
-      legendFontColor: '#7F7F7F',
-      legendFontSize: 15,
+      population: data.availableOrders,
+      color: '#2E7D32', // Dark green
+      legendFontColor: '#333',
+      legendFontSize: 12,
     },
     {
       name: 'Completed Orders',
-      population: completedOrders,
-      color: '#FF9800',
-      legendFontColor: '#7F7F7F',
-      legendFontSize: 15,
+      population: data.completedOrders,
+      color: '#4CAF50', // Medium green
+      legendFontColor: '#333',
+      legendFontSize: 12,
     },
     {
       name: 'Pending Orders',
-      population: pendingOrders,
-      color: '#F44336',
-      legendFontColor: '#7F7F7F',
-      legendFontSize: 15,
+      population: data.pendingOrders,
+      color: '#8BC34A', // Light green
+      legendFontColor: '#333',
+      legendFontSize: 12,
     },
   ];
 
+  // Card component for reusability
+  const StatCard = ({ title, value, isCurrency = false }) => (
+    <View style={styles.card}>
+      <Text style={styles.cardTitle}>{title}</Text>
+      <Animated.Text style={styles.cardValue}>
+        {isCurrency ? '₹' : ''}{formatNumber(value)}
+      </Animated.Text>
+    </View>
+  );
+
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
       <Text style={styles.title}>My Farm Dashboard</Text>
 
       <View style={styles.cardContainer}>
-        <View style={styles.card}>
-          <Text style={styles.cardTitle}>Total Farmers</Text>
-          <Animated.Text style={styles.cardValue}>{farmersCount}</Animated.Text>
-        </View>
-
-        <View style={styles.card}>
-          <Text style={styles.cardTitle}>Total Orders Placed</Text>
-          <Animated.Text style={styles.cardValue}>{ordersCount}</Animated.Text>
-        </View>
-
-        <View style={styles.card}>
-          <Text style={styles.cardTitle}>Available Orders</Text>
-          <Animated.Text style={styles.cardValue}>{availableCount}</Animated.Text>
-        </View>
-
-        <View style={styles.card}>
-          <Text style={styles.cardTitle}>Completed Orders</Text>
-          <Animated.Text style={styles.cardValue}>{completedCount}</Animated.Text>
-        </View>
-
-        <View style={styles.card}>
-          <Text style={styles.cardTitle}>Pending Orders</Text>
-          <Animated.Text style={styles.cardValue}>{pendingCount}</Animated.Text>
-        </View>
-
-        <View style={styles.card}>
-          <Text style={styles.cardTitle}>Total Revenue</Text>
-          <Animated.Text style={styles.cardValue}>$50,000</Animated.Text>
-        </View>
-
-        <View style={styles.card}>
-          <Text style={styles.cardTitle}>Total Crops</Text>
-          <Animated.Text style={styles.cardValue}>{cropsCount}</ Animated.Text>
-        </View>
+        <StatCard title="Total Farmers" value={counters.farmers} />
+        <StatCard title="Total Orders" value={counters.orders} />
+        <StatCard title="Available Orders" value={counters.available} />
+        <StatCard title="Completed Orders" value={counters.completed} />
+        <StatCard title="Pending Orders" value={counters.pending} />
+        <StatCard title="Total Revenue" value={counters.revenue} isCurrency />
+        <StatCard title="Total Crops" value={counters.crops} />
       </View>
 
       <Text style={styles.chartTitle}>Order Distribution</Text>
-      <PieChart
-        data={chartData}
-        width={Dimensions.get('window').width - 40} // Responsive width
-        height={220}
-        chartConfig={{
-          backgroundColor: '#ffffff',
-          backgroundGradientFrom: '#ffffff',
-          backgroundGradientTo: '#ffffff',
-          color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-          labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-          style: {
-            borderRadius: 16,
-          },
-        }}
-        accessor="population"
-        backgroundColor="transparent"
-        paddingLeft="15"
-        absolute
-      />
+      <View style={styles.chartContainer}>
+        <PieChart
+          data={chartData}
+          width={Math.min(Dimensions.get('window').width - 40, 400)}
+          height={220}
+          chartConfig={{
+            backgroundColor: '#ffffff',
+            backgroundGradientFrom: '#ffffff',
+            backgroundGradientTo: '#ffffff',
+            color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+            labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+          }}
+          accessor="population"
+          backgroundColor="transparent"
+          paddingLeft="15"
+          absolute
+          hasLegend={true}
+          avoidFalseZero
+          center={[10, 0]}
+        />
+      </View>
     </ScrollView>
   );
 };
@@ -142,47 +142,64 @@ const MyFarm = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#F5F9F5', // Light green background
+  },
+  contentContainer: {
+    padding: 16,
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20,
+    color: '#1B5E20', // Dark green text
+    textAlign: 'center',
   },
   cardContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
+    marginBottom: 16,
   },
   card: {
-    backgroundColor: '#fff',
-    borderRadius: 10,
-    padding: 15,
-    marginBottom: 15,
-    width: '48%', // Responsive width
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.2,
-    shadowRadius: 1.41,
-    elevation: 2,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 12,
+    width: Dimensions.get('window').width > 500 ? '30%' : '48%', // Responsive width
+    shadowColor: '#2E7D32',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
   },
   cardTitle: {
-    fontSize: 18,
+    fontSize: 14,
     fontWeight: '600',
+    color: '#555',
+    marginBottom: 4,
   },
   cardValue: {
-    fontSize: 24,
+    fontSize: 22,
     fontWeight: 'bold',
-    color: '#4CAF50',
+    color: '#388E3C', // Green value color
   },
   chartTitle: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: 'bold',
-    marginVertical: 20,
+    marginVertical: 12,
+    color: '#1B5E20',
+    textAlign: 'center',
+  },
+  chartContainer: {
+    alignItems: 'center',
+    backgroundColor: '#FFFFFF',
+    borderRadius: 12,
+    padding: 12,
+    shadowColor: '#2E7D32',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
   },
 });
 

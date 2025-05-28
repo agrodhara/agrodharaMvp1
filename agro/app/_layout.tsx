@@ -4,7 +4,7 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Constants
-const API_URL = process.env.EXPO_PUBLIC_API_URL || 'https://agrodhara-18yb.onrender.com';
+const API_URL = process.env.EXPO_PUBLIC_API_URL || 'http://3.110.114.250:5000';
 
 // Define your app routes
 export const ROUTES = {

@@ -41,7 +41,7 @@ const TermsAndFAQ = () => {
  {/* FAQ Section */}
 
         <Text style={styles.contact}>
-          If you have any queries, contact us at <Text style={styles.email}>wecare@Agrodhara.com</Text>
+          If you have any queries, contact us at <Text style={styles.email}>Agrodhara1@gmail.com</Text>
         </Text>
         <Text style={styles.sectionTitle}>Frequently Asked Questions</Text>
         {FAQ_DATA.map((faq, index) => (

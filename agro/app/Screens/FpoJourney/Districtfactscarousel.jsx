@@ -32,7 +32,7 @@ const DistrictFactsCarousel = ({ districtFacts, loading }) => {
             useNativeDriver: true
           }).start();
         });
-      }, 4000); // Change every 4 seconds
+      }, 8000); // Change every 4 seconds
       
       return () => clearInterval(interval);
     }

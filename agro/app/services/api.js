@@ -6,7 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { router } from 'expo-router';
 
 // Define the API URL
-const API_URL = process.env.EXPO_PUBLIC_API_URL || 'https://agrodhara-18yb.onrender.com/';
+const API_URL = process.env.EXPO_PUBLIC_API_URL || 'http://3.110.114.250:5000/';
 console.log('API service using URL:', API_URL);
 
 // Create a base axios instance for non-authenticated routes
