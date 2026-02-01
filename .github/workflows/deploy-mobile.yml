@@ -1,0 +1,147 @@
+name: Build Mobile App (Expo)
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+    paths:
+      - 'agro/**'
+      - '.github/workflows/deploy-mobile.yml'
+  pull_request:
+    branches:
+      - main
+      - dev
+    paths:
+      - 'agro/**'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    defaults:
+      run:
+        working-directory: agro
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: agro/package-lock.json
+      
+      - name: Setup Expo
+        uses: expo/expo-github-action@v8
+        with:
+          expo-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Check Expo configuration
+        run: npx expo-doctor
+        continue-on-error: true
+      
+      - name: Run linter
+        run: npm run lint || echo "Linting completed with warnings"
+        continue-on-error: true
+      
+      # Build for Android
+      - name: Build Android APK
+        if: github.ref == 'refs/heads/main'
+        run: |
+          eas build --platform android --profile preview --non-interactive || \
+          npx expo build:android -t apk --non-interactive
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+      
+      # Build for iOS (requires macOS runner)
+      # - name: Build iOS IPA
+      #   if: github.ref == 'refs/heads/main' && runner.os == 'macOS'
+      #   run: |
+      #     eas build --platform ios --profile preview --non-interactive || \
+      #     npx expo build:ios -t archive --non-interactive
+      #   env:
+      #     EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+      
+      # Publish to Expo
+      - name: Publish to Expo
+        if: github.ref == 'refs/heads/main'
+        run: npx expo publish --non-interactive
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+      
+      - name: Upload build artifacts
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mobile-app-build
+          path: agro/build
+          retention-days: 7
+        continue-on-error: true
+      
+      - name: Build summary
+        if: success()
+        run: |
+          echo "✅ Mobile app built successfully!"
+          echo "📱 Build artifacts created"
+          echo "🚀 Published to Expo"
+          echo ""
+          echo "To test: Download Expo Go app and scan QR code from Expo dashboard"
+
+  # Optional: Build with EAS for production releases
+  build-production:
+    if: github.ref == 'refs/heads/main' && github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    
+    defaults:
+      run:
+        working-directory: agro
+    
+    strategy:
+      matrix:
+        platform: [android, ios]
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      
+      - name: Setup Expo and EAS
+        uses: expo/expo-github-action@v8
+        with:
+          expo-version: latest
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Build with EAS
+        run: eas build --platform ${{ matrix.platform }} --profile production --non-interactive
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+      
+      - name: Submit to App Store (iOS only)
+        if: matrix.platform == 'ios'
+        run: eas submit --platform ios --latest
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+        continue-on-error: true
+      
+      - name: Submit to Play Store (Android only)
+        if: matrix.platform == 'android'
+        run: eas submit --platform android --latest
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+        continue-on-error: true

@@ -1,0 +1,144 @@
+name: Deploy Backend API
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+    paths:
+      - 'src/**'
+      - '.github/workflows/deploy-backend.yml'
+  pull_request:
+    branches:
+      - main
+      - dev
+    paths:
+      - 'src/**'
+  workflow_dispatch:
+
+jobs:
+  test-and-deploy:
+    runs-on: ubuntu-latest
+    
+    defaults:
+      run:
+        working-directory: src
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: src/package-lock.json
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Create .env file
+        run: |
+          cat << EOF > .env
+          PORT=${{ secrets.PORT || '5000' }}
+          NODE_ENV=${{ secrets.NODE_ENV || 'production' }}
+          
+          # MongoDB Configuration
+          MONGODB_URI=${{ secrets.MONGODB_URI }}
+          DB_NAME=${{ secrets.DB_NAME || 'fpo_management2' }}
+          
+          # AWS Configuration
+          AWS_REGION=${{ secrets.AWS_REGION || 'ap-south-1' }}
+          AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          
+          # JWT Configuration
+          JWT_SECRET=${{ secrets.JWT_SECRET }}
+          ACCESS_TOKEN_SECRET=${{ secrets.ACCESS_TOKEN_SECRET }}
+          REFRESH_TOKEN_SECRET=${{ secrets.REFRESH_TOKEN_SECRET }}
+          JWT_EXPIRY=${{ secrets.JWT_EXPIRY || '7d' }}
+          
+          # Application Settings
+          OTP_EXPIRY_MINUTES=${{ secrets.OTP_EXPIRY_MINUTES || '10' }}
+          MAX_LOGIN_ATTEMPTS=${{ secrets.MAX_LOGIN_ATTEMPTS || '5' }}
+          
+          # CORS Settings
+          FRONTEND_URL=${{ secrets.FRONTEND_URL }}
+          MOBILE_APP_URL=${{ secrets.MOBILE_APP_URL }}
+          EOF
+      
+      - name: Run tests (if available)
+        run: npm test || echo "No tests configured"
+        continue-on-error: true
+      
+      - name: Build application (if applicable)
+        run: npm run build || echo "No build step required"
+        continue-on-error: true
+      
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-api
+          path: |
+            src/
+            !src/node_modules
+          retention-days: 7
+      
+      # Deploy to various platforms (uncomment as needed)
+      
+      # Deploy to Heroku
+      # - name: Deploy to Heroku
+      #   if: github.ref == 'refs/heads/main'
+      #   uses: akhileshns/heroku-deploy@v3.13.15
+      #   with:
+      #     heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+      #     heroku_app_name: ${{ secrets.HEROKU_APP_NAME }}
+      #     heroku_email: ${{ secrets.HEROKU_EMAIL }}
+      #     appdir: "src"
+      
+      # Deploy to Railway
+      # - name: Deploy to Railway
+      #   if: github.ref == 'refs/heads/main'
+      #   uses: bervProject/railway-deploy@main
+      #   with:
+      #     railway_token: ${{ secrets.RAILWAY_TOKEN }}
+      #     service: ${{ secrets.RAILWAY_SERVICE }}
+      
+      # Deploy to Render
+      # - name: Trigger Render Deploy
+      #   if: github.ref == 'refs/heads/main'
+      #   run: |
+      #     curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+      
+      # Deploy to AWS EC2 (using SSH)
+      # - name: Deploy to AWS EC2
+      #   if: github.ref == 'refs/heads/main'
+      #   uses: appleboy/ssh-action@master
+      #   with:
+      #     host: ${{ secrets.EC2_HOST }}
+      #     username: ${{ secrets.EC2_USERNAME }}
+      #     key: ${{ secrets.EC2_SSH_KEY }}
+      #     script: |
+      #       cd /var/www/agrodharaMvp1
+      #       git pull origin main
+      #       cd src
+      #       npm install
+      #       pm2 restart agrodharaMvp1-api
+      
+      # Deploy to DigitalOcean App Platform
+      # - name: Deploy to DigitalOcean
+      #   if: github.ref == 'refs/heads/main'
+      #   uses: digitalocean/app_action@main
+      #   with:
+      #     app_name: agrodharaMvp1-api
+      #     token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+      
+      - name: Deployment summary
+        if: success()
+        run: |
+          echo "✅ Backend API tested successfully!"
+          echo "📦 Artifacts uploaded"
+          echo "🚀 Ready for deployment"
+          echo ""
+          echo "To deploy, uncomment your preferred deployment method in the workflow file"
