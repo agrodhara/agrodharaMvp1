@@ -123,7 +123,7 @@ const products = [
 import { useNavigate, useParams } from "react-router-dom";
 
 const ProductItemDetail = () => {
-  const { categorySlug, itemSlug } = useParams();
+  const { categorySlug } = useParams();
   const navigate = useNavigate();
 
   const item = products.find(
