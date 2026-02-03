@@ -50,6 +50,7 @@ jobs:
         run: npm run build
         env:
           VITE_API_URL: ${{ secrets.VITE_API_URL || 'http://localhost:5000' }}
+          VITE_BASE_URL: ${{ secrets.CUSTOM_DOMAIN && '/' || '/agrodharaMvp1/' }}
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
