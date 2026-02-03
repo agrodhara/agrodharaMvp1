@@ -6,63 +6,63 @@ on:
       - main
       - dev
     paths:
-      - 'webfrontend/webfrontend/**'
-      - '.github/workflows/deploy-web-frontend.yml'
+      - "webfrontend/webfrontend/**"
+      - ".github/workflows/deploy-web-frontend.yml"
   pull_request:
     branches:
       - main
       - dev
     paths:
-      - 'webfrontend/webfrontend/**'
+      - "webfrontend/webfrontend/**"
   workflow_dispatch:
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    
+
     defaults:
       run:
         working-directory: webfrontend/webfrontend
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
-          cache: 'npm'
+          node-version: "22"
+          cache: "npm"
           cache-dependency-path: webfrontend/webfrontend/package-lock.json
-      
+
       - name: Install dependencies
         run: npm ci
-      
+
       - name: Lint code
         run: npm run lint || echo "Linting completed with warnings"
         continue-on-error: true
-      
+
       - name: Build production bundle
         run: npm run build
         env:
           VITE_API_URL: ${{ secrets.VITE_API_URL || 'http://localhost:5000' }}
-      
+
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
           name: web-frontend-build
           path: webfrontend/webfrontend/dist
           retention-days: 7
-      
+
       # Optional: Deploy to GitHub Pages
       - name: Deploy to GitHub Pages
-        if: github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev'
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./webfrontend/webfrontend/dist
-          cname: your-custom-domain.com # Optional: Remove if not using custom domain
-      
+          publish_dir: webfrontend/webfrontend/dist
+          cname: ${{ secrets.CUSTOM_DOMAIN }} # Set CUSTOM_DOMAIN in GitHub secrets
+
       # Optional: Deploy to Vercel
       # - name: Deploy to Vercel
       #   if: github.ref == 'refs/heads/main'
@@ -72,7 +72,7 @@ jobs:
       #     vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
       #     vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
       #     working-directory: ./webfrontend/webfrontend
-      
+
       # Optional: Deploy to Netlify
       # - name: Deploy to Netlify
       #   if: github.ref == 'refs/heads/main'
@@ -85,7 +85,7 @@ jobs:
       #   env:
       #     NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
       #     NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
-      
+
       - name: Deployment summary
         if: success()
         run: |
