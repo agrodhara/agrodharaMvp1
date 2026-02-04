@@ -14,10 +14,14 @@ import { Navbar } from "./components/common/Navbar";
 import { Footer } from "./components/common/Footer";
 import Enquiry from "./pages/Enquiry";
 import ProductItemDetail from "./pages/ProductItemDetail";
+
+// Get basename from Vite's base URL (handles both custom domain "/" and project pages "/agrodharaMvp1/")
+const basename = import.meta.env.BASE_URL?.replace(/\/$/, "") || "";
+
 function App() {
     return (
         <AuthProvider>
-            <Router>
+            <Router basename={basename}>
                 <Navbar />
                 <Routes>
                     <Route path="/" element={<Home />} />
