@@ -1,5 +1,6 @@
 const mysql = require('mysql2/promise');
-require('dotenv').config();
+const path = require('path');
+require('dotenv').config({ path: path.resolve(__dirname, '..', '.env') });
 
 const pool = mysql.createPool({
   host: process.env.DB_HOST || 'localhost',
@@ -87,12 +88,57 @@ const initializeDatabase = async () => {
     `);
 
     await conn.query(`
-      CREATE TABLE IF NOT EXISTS farmer_sessions (
+      CREATE TABLE IF NOT EXISTS farmer_sessions2 (
         id INT AUTO_INCREMENT PRIMARY KEY,
         farmer_id INT NOT NULL,
         access_token TEXT NOT NULL,
         refresh_token TEXT NOT NULL,
         expires_at DATETIME NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+
+    await conn.query(`
+      CREATE TABLE IF NOT EXISTS farmers2 (
+        farmer_id INT AUTO_INCREMENT PRIMARY KEY,
+        fpo_id INT,
+        farmer_name VARCHAR(255),
+        contact_number VARCHAR(15),
+        village_name VARCHAR(255),
+        house_number VARCHAR(100),
+        gram_panchayat VARCHAR(255),
+        district_name VARCHAR(255),
+        state_name VARCHAR(255),
+        pincode VARCHAR(10),
+        block VARCHAR(255),
+        years_in_farming INT,
+        years_in_growing_crop INT,
+        total_plot_size DECIMAL(10,2),
+        total_plot_unit VARCHAR(50),
+        soil_testing_done VARCHAR(10),
+        open_to_soil_testing VARCHAR(10),
+        prone_to_calamities VARCHAR(10),
+        calamity_type VARCHAR(255),
+        impact_duration_days INT,
+        impact_severity VARCHAR(50),
+        willing_to_adopt_sustainable_farming VARCHAR(10),
+        participates_in_govt_schemes VARCHAR(10),
+        preferred_payment_method VARCHAR(100),
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+
+    await conn.query(`
+      CREATE TABLE IF NOT EXISTS farmer_crop_details (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        farmer_id INT NOT NULL,
+        crop_variety VARCHAR(255),
+        crop_sub_variety VARCHAR(255),
+        grade VARCHAR(50),
+        sowing_date DATE,
+        farming_type VARCHAR(100),
+        harvest_date DATE,
+        expected_harvest_quantity DECIMAL(10,2),
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )
     `);

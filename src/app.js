@@ -1,4 +1,5 @@
-require('dotenv').config();
+const path = require('path');
+require('dotenv').config({ path: path.resolve(__dirname, '.env') });
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
@@ -15,7 +16,7 @@ const app = express();
 
 // Middleware
 app.use(cors({
-  origin: ['http://localhost:3000', 'http://localhost:19006', 'http://localhost:8081', 'http://localhost:19000'], // Add your frontend URLs
+  origin: ['http://localhost:3000', 'http://localhost:19006', 'http://localhost:8081', 'http://localhost:19000', 'http://192.168.0.7:3000', 'http://192.168.0.7:8081', 'http://3.110.114.250:3000'],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
   credentials: true,
