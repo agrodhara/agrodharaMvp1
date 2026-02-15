@@ -146,6 +146,52 @@ const initializeDatabase = async () => {
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )
     `);
+
+    // Crop varieties and sub-varieties tables
+    await conn.query(`
+      CREATE TABLE IF NOT EXISTS crop_varieties (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        name_en VARCHAR(255) NOT NULL,
+        name_hi VARCHAR(255) NOT NULL
+      )
+    `);
+
+    await conn.query(`
+      CREATE TABLE IF NOT EXISTS sub_varieties (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        crop_variety_id INT NOT NULL,
+        name_en VARCHAR(255) NOT NULL,
+        name_hi VARCHAR(255) NOT NULL
+      )
+    `);
+
+    // Seed crop varieties if empty
+    const [existingVarieties] = await conn.query('SELECT COUNT(*) as cnt FROM crop_varieties');
+    if (existingVarieties[0].cnt === 0) {
+      await conn.query(`INSERT INTO crop_varieties (id, name_en, name_hi) VALUES 
+        (1, 'Kalanamak rice', 'कालानमक चावल'),
+        (2, 'Foxnuts(makhana)', 'मखाना')
+      `);
+
+      await conn.query(`INSERT INTO sub_varieties (crop_variety_id, name_en, name_hi) VALUES 
+        (1, 'KN3', 'KN3'),
+        (1, 'KN 207', 'KN 207'),
+        (1, 'KN 208', 'KN 208'),
+        (1, 'KN 209', 'KN 209'),
+        (1, 'PUSA 1638', 'PUSA 1638'),
+        (1, 'PUSA 1652', 'PUSA 1652'),
+        (1, 'KIRAN', 'KIRAN'),
+        (2, 'Suta 3-4 (9-12.5mm)', 'सूता 3-4 (9-12.5mm)'),
+        (2, 'Suta 4-5 (12.5-15.5mm)', 'सूता 4-5 (12.5-15.5mm)'),
+        (2, 'Suta 4+ (Multi-Size) (12.5-24mm)', 'सूता 4+ (मल्टी-साइज़) (12.5-24mm)'),
+        (2, 'Suta 5-6 Pure/HP (15.7-19mm)', 'सूता 5-6 प्योर/HP (15.7-19mm)'),
+        (2, 'Suta 5+ Non-HP (15.75-24mm)', 'सूता 5+ नॉन-HP (15.75-24mm)'),
+        (2, 'Suta 5+ HP (15.75-24mm)', 'सूता 5+ HP (15.75-24mm)'),
+        (2, 'Suta 6+ Non-HP (19-24mm)', 'सूता 6+ नॉन-HP (19-24mm)'),
+        (2, 'Suta 6+ HP (19-24mm)', 'सूता 6+ HP (19-24mm)')
+      `);
+      console.log('✅ Crop varieties and sub-varieties seeded');
+    }
     
     // Migrations: add missing columns to existing tables
     const alterStatements = [

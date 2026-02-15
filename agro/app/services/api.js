@@ -26,9 +26,17 @@ const publicRoutes = [
   '/api/auth/fpo/basic-verify-otp',
   '/api/auth/fpo/direct-register',
   '/api/auth/fpo/check-user-exists',
+  '/api/auth/fpo/login',
+  '/api/auth/farmer/send-otp',
+  '/api/auth/farmer/verify-otp',
   '/api/refresh-token',
   '/api/check-user-exists',
   '/api/fpo/login',
+  'api/auth/fpo/login',
+  'api/auth/fpo/send-otp',
+  'api/auth/fpo/verify-otp',
+  'api/auth/fpo/direct-register',
+  'api/auth/fpo/check-user-exists',
   // Add any public farmer routes here if they exist
 ];
 
