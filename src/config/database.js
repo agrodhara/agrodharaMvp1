@@ -9,7 +9,8 @@ const pool = mysql.createPool({
   database: process.env.DB_NAME || 'fpo_management2',
   waitForConnections: true,
   connectionLimit: 40,
-  queueLimit: 0
+  queueLimit: 0,
+  charset: 'utf8mb4'
 });
 
 const initializeDatabase = async () => {
@@ -18,12 +19,16 @@ const initializeDatabase = async () => {
     const conn = await mysql.createConnection({
       host: process.env.DB_HOST || 'localhost',
       user: process.env.DB_USER || 'root',
-      password: process.env.DB_PASSWORD
+      password: process.env.DB_PASSWORD,
+      charset: 'utf8mb4'
     });
 
     // Create database if not exists
-    await conn.query(`CREATE DATABASE IF NOT EXISTS ${process.env.DB_NAME || 'fpo_management2'}`);
+    await conn.query(`CREATE DATABASE IF NOT EXISTS ${process.env.DB_NAME || 'fpo_management2'} CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci`);
     await conn.query(`USE ${process.env.DB_NAME || 'fpo_management2'}`);
+    
+    // Ensure database uses utf8mb4
+    await conn.query(`ALTER DATABASE ${process.env.DB_NAME || 'fpo_management2'} CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci`);
     
     // Create tables without foreign key constraints
     await conn.query(`
@@ -153,7 +158,7 @@ const initializeDatabase = async () => {
         id INT AUTO_INCREMENT PRIMARY KEY,
         name_en VARCHAR(255) NOT NULL,
         name_hi VARCHAR(255) NOT NULL
-      )
+      ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci
     `);
 
     await conn.query(`
@@ -162,8 +167,12 @@ const initializeDatabase = async () => {
         crop_variety_id INT NOT NULL,
         name_en VARCHAR(255) NOT NULL,
         name_hi VARCHAR(255) NOT NULL
-      )
+      ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci
     `);
+
+    // Convert existing tables to utf8mb4 (in case they were created with wrong charset)
+    await conn.query(`ALTER TABLE crop_varieties CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci`);
+    await conn.query(`ALTER TABLE sub_varieties CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci`);
 
     // Seed crop varieties if empty
     const [existingVarieties] = await conn.query('SELECT COUNT(*) as cnt FROM crop_varieties');
