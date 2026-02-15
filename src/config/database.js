@@ -31,15 +31,19 @@ const initializeDatabase = async () => {
         id INT AUTO_INCREMENT PRIMARY KEY,
         phone VARCHAR(15) NOT NULL UNIQUE,
         fpo_name VARCHAR(255) NOT NULL,
+        email VARCHAR(255),
         legal_structure ENUM('Cooperative', 'Company', 'Society', 'Other') NOT NULL,
+        whatsapp_enabled VARCHAR(10),
         incorporation_date DATE NOT NULL,
         password VARCHAR(255) NOT NULL,
         registration_number VARCHAR(50) UNIQUE NOT NULL,
         state VARCHAR(100) NOT NULL,
         district VARCHAR(100) NOT NULL,
         villages_covered TEXT,
-        contact_name VARCHAR(255) NOT NULL,
-        designation VARCHAR(100) NOT NULL,
+        board_member_name VARCHAR(255),
+        ceo_name VARCHAR(255),
+        contact_name VARCHAR(255),
+        designation VARCHAR(100),
         alternate_contact VARCHAR(15),
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )
@@ -143,6 +147,25 @@ const initializeDatabase = async () => {
       )
     `);
     
+    // Migrations: add missing columns to existing tables
+    const alterStatements = [
+      "ALTER TABLE fpo_details ADD COLUMN IF NOT EXISTS email VARCHAR(255)",
+      "ALTER TABLE fpo_details ADD COLUMN IF NOT EXISTS whatsapp_enabled VARCHAR(10)",
+      "ALTER TABLE fpo_details ADD COLUMN IF NOT EXISTS board_member_name VARCHAR(255)",
+      "ALTER TABLE fpo_details ADD COLUMN IF NOT EXISTS ceo_name VARCHAR(255)",
+      "ALTER TABLE farmers2 ADD COLUMN IF NOT EXISTS verification_status VARCHAR(20) DEFAULT 'pending'",
+    ];
+    for (const sql of alterStatements) {
+      try {
+        await conn.query(sql);
+      } catch (e) {
+        // Ignore errors (column may already exist on MySQL which doesn't support IF NOT EXISTS)
+        if (!e.message.includes('Duplicate column')) {
+          console.warn('Migration warning:', e.message);
+        }
+      }
+    }
+
     console.log('✅ Database tables initialized');
     await conn.end();
   } catch (error) {
