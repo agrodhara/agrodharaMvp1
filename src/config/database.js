@@ -153,6 +153,8 @@ const initializeDatabase = async () => {
       "ALTER TABLE fpo_details ADD COLUMN IF NOT EXISTS whatsapp_enabled VARCHAR(10)",
       "ALTER TABLE fpo_details ADD COLUMN IF NOT EXISTS board_member_name VARCHAR(255)",
       "ALTER TABLE fpo_details ADD COLUMN IF NOT EXISTS ceo_name VARCHAR(255)",
+      "ALTER TABLE fpo_details MODIFY COLUMN contact_name VARCHAR(255) NULL",
+      "ALTER TABLE fpo_details MODIFY COLUMN designation VARCHAR(100) NULL",
       "ALTER TABLE farmers2 ADD COLUMN IF NOT EXISTS verification_status VARCHAR(20) DEFAULT 'pending'",
     ];
     for (const sql of alterStatements) {
