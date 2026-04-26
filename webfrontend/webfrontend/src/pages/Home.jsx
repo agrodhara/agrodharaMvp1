@@ -197,7 +197,7 @@ const Home = () => {
        East Patel Nagar, Road no 4, Patna 800023
      </p>
      <p className="text-gray-700">
-       +91 98902 XXXXX / +91 8600 XXXXX
+       +91 8452968020 / +91 924 6276144
      </p>
      <a href="mailto:info@agrodhara.com" className="text-blue-600 underline">
        info@agrodhara.com
