@@ -194,7 +194,7 @@ const Home = () => {
    <img src="/logo.png" alt="Agrodhara Logo" className="w-24 h-auto" />
    <div className="flex flex-col items-start text-left space-y-2">
      <p className="text-gray-700">
-       70/21 Pramod Apartment, Pimpri Chinchwad, Pune 411033
+       East Patel Nagar, Road no 4, Patna 800023
      </p>
      <p className="text-gray-700">
        +91 98902 XXXXX / +91 8600 XXXXX
